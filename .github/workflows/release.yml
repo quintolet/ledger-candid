@@ -19,7 +19,8 @@ jobs:
           args: --target wasm32-unknown-unknown --release
       - name: Install binaryen
         run: |
-          wget https://github.com/WebAssembly/binaryen/releases/download/version_101/binaryen-version_101-x86_64-linux.tar.gz
-          sudo tar -C / --strip-components=1 -xvf binaryen-version_101-x86_64-linux.tar.gz
+          curl -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_101/binaryen-version_101-x86_64-linux.tar.gz
+          tar --strip-components=1 -xvf binaryen.tar.gz
+          ls -l
       - name: Run wasm-opt
-        run:  wasm-opt -O2 -o ledger_candid-opt.wasm target/wasm32-unknown-unknown/release/ledger_candid.wasm
+        run:  ./bin/wasm-opt -O2 -o ledger_candid-opt.wasm target/wasm32-unknown-unknown/release/ledger_candid.wasm
