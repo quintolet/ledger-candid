@@ -1,6 +1,6 @@
 use candid::CandidType;
 use dfn_candid::{candid, candid_one};
-use dfn_core::{api::call_with_cleanup, over_async};
+use dfn_core::{api::call_with_cleanup, over, over_async};
 use dfn_protobuf::protobuf;
 use ic_nns_constants::LEDGER_CANISTER_ID;
 use ic_types::CanisterId;
@@ -51,5 +51,12 @@ async fn get_tip_of_chain() -> Result<TipOfChain, String> {
     Ok(TipOfChain {
         certification: result.certification,
         tip_index: result.tip_index,
+    })
+}
+
+#[export_name = "canister_query __get_candid_interface_tmp_hack"]
+fn expose_candid() {
+    over(candid, |_: ()| {
+        include_str!("../ledger_candid.did").to_string()
     })
 }
