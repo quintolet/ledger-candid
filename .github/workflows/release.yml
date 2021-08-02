@@ -17,3 +17,7 @@ jobs:
           use-cross: true
           command: build
           args: --target wasm32-unknown-unknown --release
+      - name: Install binaryen
+        run: sudo apt-get install binaryen
+      - name: Run wasm-opt
+        run:  wasm-opt -O2 -o ledger_candid-opt.wasm target/wasm32-unknown-unknown/release/ledger_candid.wasm
