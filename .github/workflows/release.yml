@@ -1,6 +1,9 @@
 name: Release
 
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   wasm:
@@ -21,6 +24,13 @@ jobs:
         run: |
           curl -Lo binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_101/binaryen-version_101-x86_64-linux.tar.gz
           tar --strip-components=1 -xvf binaryen.tar.gz
-          ls -l
       - name: Run wasm-opt
-        run:  ./bin/wasm-opt -O2 -o ledger_candid-opt.wasm target/wasm32-unknown-unknown/release/ledger_candid.wasm
+        run:  ./bin/wasm-opt -O2 -o ledger_candid.wasm target/wasm32-unknown-unknown/release/ledger_candid.wasm
+      - name: Upload
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ledger_candid.*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
